@@ -1,0 +1,1 @@
+from face_recog_server.face_recog_service import FaceRecog
