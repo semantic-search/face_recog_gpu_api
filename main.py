@@ -55,7 +55,7 @@ def register(file: UploadFile = File(...), user_name: str = Form(...)):
 @app.post("/recognize")
 def recog(file: UploadFile = File(...)):
     file_name = _save(file)
-    uname = face_recog_obj.face_recognpition(file_name)
+    uname = face_recog_obj.face_recognition(file_name)
     if uname is None:
         """if unknown person detected than return none"""
         os.remove(file_name)
@@ -91,7 +91,7 @@ def fetch_images(uname):
 @app.post("/face_search")
 def face_search(file: UploadFile = File(...)):
     file_name = _save(file)
-    uname = face_recog_obj.face_recognpition(file_name)
+    uname = face_recog_obj.face_recognition(file_name)
     if uname is not None:
         b64_list = fetch_images(uname)
         return b64_list
