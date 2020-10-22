@@ -74,6 +74,7 @@ def recog(file: UploadFile = File(...)):
 
 
 def fetch_images(uname):
+    print(uname)
     b64_data = list()
     face_objects = FaceModel.objects(person=uname)
     for obj in face_objects:
