@@ -76,9 +76,11 @@ def recog(file: UploadFile = File(...)):
 def fetch_images(uname):
     print(uname)
     b64_data = list()
+    doc_ids = list()
     face_objects = FaceModel.objects(person=uname)
     for obj in face_objects:
         image = obj.file.read()
+        doc_id = str(obj.document.id)
         b64_file = base64.b64encode(image)
         if b64_file is None or not b64_file:
             print("********************IN EMPTY**************************************")
@@ -86,7 +88,12 @@ def fetch_images(uname):
             image = obj.file.read()
             b64_file = base64.b64encode(image)
         b64_data.append(b64_file)
-    return b64_data
+        doc_ids.append(doc_id)
+    data = {
+        "document": doc_ids,
+        "files": b64_data
+    }
+    return data
 
 
 @app.post("/face_search")
@@ -94,16 +101,17 @@ def face_search(file: UploadFile = File(...)):
     file_name = _save(file)
     uname = face_recog_obj.face_recognition(file_name)
     if uname is not None:
-        b64_list = fetch_images(uname)
-        return b64_list
+        data = fetch_images(uname)
+        return data
     else:
         return False
 
 
 @app.post("/person_search")
 def face_search(user_name: str = Form(...)):
-    b64_list = fetch_images(user_name)
+    data = fetch_images(user_name)
+    b64_list = data["files"]
     if len(b64_list) == 0:
         return False
     else:
-        return b64_list
+        return data
