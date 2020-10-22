@@ -135,7 +135,6 @@ class FaceRecog:
     def face_recognition(self, face_image, encoding=False):
         embeddings = []
         for dic in globals.embeddings:
-            print(dic["name"])
             embeddings.append(dic["encoding"])
         uname = None
         """if face detection occurs than try else except"""
