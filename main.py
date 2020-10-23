@@ -20,6 +20,19 @@ def _save(file):
 
 
 app = FastAPI()
+
+origins = [
+    globals.CORS_ORIGIN
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 global_init()
 for user in UserModel.objects:
     globals.add_to_embeddings(username=user.user_name, encoding=pickle.loads(user.encoding))
