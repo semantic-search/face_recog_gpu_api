@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.middleware.cors import CORSMiddleware
 from db_models.mongo_setup import global_init
 from db_models.models.user_model import UserModel
 from db_models.models.face_model import FaceModel
