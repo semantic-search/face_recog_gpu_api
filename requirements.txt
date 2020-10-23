@@ -8,3 +8,4 @@ uvicorn
 blinker
 opencv-python
 scikit-build
+Pillow

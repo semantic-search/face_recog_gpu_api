@@ -8,7 +8,9 @@ import globals
 import pickle
 from face_recog_service import FaceRecog
 import base64
+from PIL import Image
 
+basewidth = 900
 
 face_recog_obj = FaceRecog()
 
@@ -50,6 +52,15 @@ def register(file: UploadFile = File(...), user_name: str = Form(...)):
         """If user_name not in db than error will be handled here """
         user_model_obj = UserModel()
         file_name = _save(file)
+        img = Image.open(file_name)
+        width, height = img.size
+        print(width, height)
+        if width > 800 or height > 600:
+            print("In resize")
+            wpercent = (basewidth / float(img.size[0]))
+            hsize = int((float(img.size[1]) * float(wpercent)))
+            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+            img.save(file_name)
         face_encoding = face_recog_obj.get_embedding(file_name)
         if face_encoding == "No-Face":
             print("############NO FACE DETECTED################")
@@ -69,6 +80,17 @@ def register(file: UploadFile = File(...), user_name: str = Form(...)):
 @app.post("/recognize")
 def recog(file: UploadFile = File(...)):
     file_name = _save(file)
+    img = Image.open(file_name)
+    width, height = img.size
+    print(width, height)
+    if width > 800 or height > 600:
+        print("In resize")
+        wpercent = (basewidth / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+        img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+        img.save(file_name)
     uname = face_recog_obj.face_recognition(file_name)
     if uname is None:
         """if unknown person detected than return none"""
