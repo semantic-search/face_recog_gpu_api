@@ -23,7 +23,7 @@ RECEIVE_TOPIC = 'FACE_RECOG'
 CONNECTED =  'CONNECTED'
 DISCONNECTED = 'DISCONNECTED'
 
-
+CORS_ORIGIN = os.getenv('CORS_ORIGIN')
 embeddings = []
 
 def add_to_embeddings(username, encoding):
